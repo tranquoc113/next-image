@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@fleekhq/fleek-storage-js": "^1.0.22",
     "@fontsource/roboto": "^4.5.8",
     "@mui/icons-material": "^5.10.14",
     "@mui/material": "^5.10.14",
