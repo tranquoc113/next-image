@@ -38,7 +38,6 @@ export async function getStaticProps() {
 export default function Home({
   posts,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  console.log(posts)
   const [open, setOpen] = useState(false);
   const handleOpen = (item: listFilesOutput) => {
     setItem(item);

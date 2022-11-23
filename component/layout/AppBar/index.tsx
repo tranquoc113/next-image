@@ -27,7 +27,6 @@ function AppBar() {
       httpUploadProgressCallback: (e) => {
         // console.log(Math.round((e.loaded / e.total) * 100) + "% done");
         const load = Math.round((e.loaded / e.total) * 100)
-        console.log("loadd--------", load)
         if(load == 100){
           setTimeout(()=>{router.reload()},1000)
         }
