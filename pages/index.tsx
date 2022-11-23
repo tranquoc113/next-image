@@ -84,14 +84,13 @@ export default function Home({
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          xx
-        {/* <img
+        <img
               width="100%"
               src={`${item?.publicUrl}?w=100&h=100&fit=crop&auto=format`}
               srcSet={`${item?.publicUrl}?w=100&h=100&fit=crop&auto=format&dpr=2 2x`}
               alt={item?.key}
               loading="lazy"
-            /> */}
+            />
         </Box>
       </Modal>
     </>
