@@ -8,7 +8,7 @@ import { listFilesOutput } from "@fleekhq/fleek-storage-js";
 import { InferGetStaticPropsType } from "next";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 const style = {
@@ -37,7 +37,18 @@ export async function getStaticProps() {
 export default function Home({
   posts,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  console.log(posts)
+  useEffect(()=>{
+    const data  = callApi();
+  },[]);
+  async function callApi() {
+    const res = await fleekStorage.listFiles({
+      apiKey: "miQcWfOyWFsRG5LBhcewnw==",
+      apiSecret: "aH5Q/ZPafPxpCt6kf0lERxTC7iNADiM9y5p5JVGJgYU=",
+      getOptions: ["bucket", "key", "hash", "publicUrl"],
+    });
+    console.log(res)
+    return res;
+  }
   const [open, setOpen] = useState(false);
   const handleOpen = (item: listFilesOutput) => {
     setItem(item);
