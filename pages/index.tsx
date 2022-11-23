@@ -38,6 +38,7 @@ export async function getStaticProps() {
 export default function Home({
   posts,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  console.log(posts)
   const [open, setOpen] = useState(false);
   const handleOpen = (item: listFilesOutput) => {
     setItem(item);
@@ -49,7 +50,7 @@ export default function Home({
     <>
     <ImageList cols={4} rowHeight={250}>
       {posts.map((item) => (
-        <ImageListItem key={item.hash} onClick={()=>handleOpen(item)}>
+        <ImageListItem key={item.key} onClick={()=>handleOpen(item)}>
           <img
             src={`${item.publicUrl}?w=264&h=264&fit=crop&auto=format`}
             srcSet={`${item.publicUrl}?w=264&h=264&fit=crop&auto=format&dpr=2 2x`}

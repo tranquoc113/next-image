@@ -22,11 +22,12 @@ function AppBar() {
     await fleekStorage.upload({
       apiKey:`${process.env.NEXT_PUBLIC_API_KEY}`,
       apiSecret:`${process.env.NEXT_PUBLIC_API_SECRET}`,
-      key: `${Math.floor(Math.random()*1000)}_${file.name}`,
+      key: `${Math.random().toString(36).replace('0.','update' || '')}_${Date.now()}_${file.name}`,
       data: file,
       httpUploadProgressCallback: (e) => {
         // console.log(Math.round((e.loaded / e.total) * 100) + "% done");
         const load = Math.round((e.loaded / e.total) * 100)
+        console.log("loadd--------", load)
         if(load == 100){
           setTimeout(()=>{router.reload()},1000)
         }
