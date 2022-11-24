@@ -19,7 +19,6 @@ export default function Layout({ children }: Props) {
         {/* <SideNav/> */}
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Toolbar />
-
           {children}
         </Box>
       </Box>

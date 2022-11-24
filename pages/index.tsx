@@ -10,6 +10,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const style = {
   position: "absolute" as "absolute",
@@ -36,12 +37,13 @@ export async function getStaticProps() {
 
 export default function Home() {
   const [posts, setPosts] = useState<listFilesOutput[]>([]);
-  useEffect(()=>{
-    callApi()
-    .then((data) => {
+  const [loading, setLoading] = useState<boolean>(true);
+  useEffect(() => {
+    callApi().then((data) => {
       setPosts(data);
-    })
-  },[]);
+      setLoading(false);
+    });
+  }, []);
   async function callApi() {
     const res = await fleekStorage.listFiles({
       apiKey: `${process.env.NEXT_PUBLIC_API_KEY_NEW}`,
@@ -59,6 +61,20 @@ export default function Home() {
   const [item, setItem] = useState<listFilesOutput>();
   return (
     <>
+      {loading && (
+        <Box sx={{ display: "flex" }}>
+          <CircularProgress
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              marginTop: "-12px",
+              marginLeft: "-12px",
+            }}
+          />
+        </Box>
+      )}
+
       <ImageList cols={4} rowHeight={250}>
         {posts.map((item) => (
           <ImageListItem key={item.hash} onClick={() => handleOpen(item)}>
@@ -96,13 +112,13 @@ export default function Home() {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-        <img
-              width="100%"
-              src={`${item?.publicUrl}?w=100&h=100&fit=crop&auto=format`}
-              srcSet={`${item?.publicUrl}?w=100&h=100&fit=crop&auto=format&dpr=2 2x`}
-              alt={item?.key}
-              loading="lazy"
-            />
+          <img
+            width="100%"
+            src={`${item?.publicUrl}?w=100&h=100&fit=crop&auto=format`}
+            srcSet={`${item?.publicUrl}?w=100&h=100&fit=crop&auto=format&dpr=2 2x`}
+            alt={item?.key}
+            loading="lazy"
+          />
         </Box>
       </Modal>
     </>
