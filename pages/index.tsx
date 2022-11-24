@@ -34,19 +34,20 @@ export async function getStaticProps() {
   return { props: { posts } };
 }
 
-export default function Home({
-  posts,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function Home() {
+  const [posts, setPosts] = useState<listFilesOutput[]>([]);
   useEffect(()=>{
-    const data  = callApi();
+    callApi()
+    .then((data) => {
+      setPosts(data);
+    })
   },[]);
   async function callApi() {
     const res = await fleekStorage.listFiles({
-      apiKey: "miQcWfOyWFsRG5LBhcewnw==",
-      apiSecret: "aH5Q/ZPafPxpCt6kf0lERxTC7iNADiM9y5p5JVGJgYU=",
+      apiKey: `${process.env.NEXT_PUBLIC_API_KEY_NEW}`,
+      apiSecret: `${process.env.NEXT_PUBLIC_API_SECRET_NEW}`,
       getOptions: ["bucket", "key", "hash", "publicUrl"],
     });
-    console.log(res)
     return res;
   }
   const [open, setOpen] = useState(false);
