@@ -19,10 +19,17 @@ function AppBar() {
     }
 
   async function callApi(file:File) {
+    let name = file.name
+    if(name.length>10){
+      const dot = name.split(".");
+      name = `${name.slice(0,10)}_${Date.now()}.${dot[1]}`;
+    }else{
+      name = `${Date.now()}.${name}`;
+    }
     await fleekStorage.upload({
       apiKey:`${process.env.NEXT_PUBLIC_API_KEY}`,
       apiSecret:`${process.env.NEXT_PUBLIC_API_SECRET}`,
-      key: `${Math.random().toString(36).replace('0.','update' || '')}_${Date.now()}_${file.name}`,
+      key: `${name}`,
       data: file,
       httpUploadProgressCallback: (e) => {
         // console.log(Math.round((e.loaded / e.total) * 100) + "% done");

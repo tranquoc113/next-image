@@ -11,6 +11,9 @@ import Box from "@mui/material/Box";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import CircularProgress from "@mui/material/CircularProgress";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 const style = {
   position: "absolute" as "absolute",
@@ -25,19 +28,12 @@ const style = {
   // p: 4,
 };
 
-export async function getStaticProps() {
-  const res = await fleekStorage.listFiles({
-    apiKey: `${process.env.API_KEY}`,
-    apiSecret: `${process.env.API_SECRET}`,
-    getOptions: ["bucket", "key", "hash", "publicUrl"],
-  });
-  const posts: listFilesOutput[] = res;
-  return { props: { posts } };
-}
-
 export default function Home() {
   const [posts, setPosts] = useState<listFilesOutput[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const theme = useTheme();
+  const matches = useMediaQuery(theme.breakpoints.up('sm'))
+
   useEffect(() => {
     callApi().then((data) => {
       setPosts(data);
@@ -75,32 +71,31 @@ export default function Home() {
         </Box>
       )}
 
-      <ImageList cols={4} rowHeight={250}>
+      <ImageList cols={matches?4:2}>
         {posts.map((item) => (
-          <ImageListItem key={item.hash} onClick={() => handleOpen(item)}>
+          <ImageListItem key={item.hash}>
             <img
               src={`${item.publicUrl}?w=264&h=264&fit=crop&auto=format`}
               srcSet={`${item.publicUrl}?w=264&h=264&fit=crop&auto=format&dpr=2 2x`}
               alt={item.key}
               loading="lazy"
+              style={{height:matches?"300px":"150px"}}
+              onClick={() => handleOpen(item)}
             />
             <ImageListItemBar
-              sx={{
-                background:
-                  "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " +
-                  "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
-              }}
-              title={item.key}
-              position="top"
+
+              title={<span>Title: {item?.key?.slice(0,23)}...</span>}
+              position="below"
+              subtitle={<span>Hash: {item?.hash?.slice(20)}...</span>}
               actionIcon={
                 <IconButton
-                  sx={{ color: "white" }}
+                  // sx={{ color: "white" }}
                   aria-label={`star ${item.key}`}
                 >
-                  <StarBorderIcon />
+                  <ContentCopyIcon />
                 </IconButton>
               }
-              actionPosition="left"
+              actionPosition="right"
             />
           </ImageListItem>
         ))}
@@ -118,6 +113,7 @@ export default function Home() {
             srcSet={`${item?.publicUrl}?w=100&h=100&fit=crop&auto=format&dpr=2 2x`}
             alt={item?.key}
             loading="lazy"
+            style={{height:matches?"400px":"250px"}}
           />
         </Box>
       </Modal>
