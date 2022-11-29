@@ -14,21 +14,13 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { NextPageWithLayout } from "@/models";
+import { MainLayout } from "component/layout";
+import { Seo } from "@/component/common/seo";
+import { FleekImageList } from "@/component/home";
 
-const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  // width: 400,
-  // height:100,
-  // bgcolor: 'background.paper',
-  // border: '2px solid #000',
-  // boxShadow: 24,
-  // p: 4,
-};
 
-export default function Home() {
+const Home: NextPageWithLayout = () => {
   const [posts, setPosts] = useState<listFilesOutput[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const theme = useTheme();
@@ -40,6 +32,8 @@ export default function Home() {
       setLoading(false);
     });
   }, []);
+
+  console.log(posts)
   async function callApi() {
     const res = await fleekStorage.listFiles({
       apiKey: `${process.env.NEXT_PUBLIC_API_KEY_NEW}`,
@@ -57,6 +51,16 @@ export default function Home() {
   const [item, setItem] = useState<listFilesOutput>();
   return (
     <>
+    <Seo
+				data={{
+					title: 'Blockchain | Update',
+					description:
+						'Step by step tutorials to build a full CRUD website using NextJS for beginners',
+					url: 'https://learn-nextjs-fawn.vercel.app/',
+					thumbnailUrl:
+						'https://cdn.getshifter.co/caa65008efb706a8bfc6f7e4045d6a018420c3df/uploads/2020/11/nextjs.png',
+				}}
+			/>
       {loading && (
         <Box sx={{ display: "flex" }}>
           <CircularProgress
@@ -70,17 +74,16 @@ export default function Home() {
           />
         </Box>
       )}
-
+      <FleekImageList lists={posts}/>
+    
       <ImageList cols={matches?4:2}>
         {posts.map((item) => (
           <ImageListItem key={item.hash}>
-            <img
-              src={`${item.publicUrl}?w=264&h=264&fit=crop&auto=format`}
-              srcSet={`${item.publicUrl}?w=264&h=264&fit=crop&auto=format&dpr=2 2x`}
-              alt={item.key}
-              loading="lazy"
-              style={{height:matches?"300px":"150px"}}
-              onClick={() => handleOpen(item)}
+            <Image 
+            width={246}
+            height={180}
+            // style={{height:matches?"300px":"150px"}}
+            src={`${item.publicUrl}?w=264&h=264&fit=crop&auto=format`} layout="responsive" alt="avatar" 
             />
             <ImageListItemBar
 
@@ -100,7 +103,7 @@ export default function Home() {
           </ImageListItem>
         ))}
       </ImageList>
-      <Modal
+      {/* <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -116,7 +119,9 @@ export default function Home() {
             style={{height:matches?"400px":"250px"}}
           />
         </Box>
-      </Modal>
+      </Modal> */}
     </>
   );
 }
+Home.Layout = MainLayout
+export default Home

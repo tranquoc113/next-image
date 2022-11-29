@@ -8,9 +8,10 @@ import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import fleekStorage from "@fleekhq/fleek-storage-js";
 import { useRouter } from 'next/router'
+import Link from "next/link";
 
-function AppBar() {
-  const router = useRouter()
+export function HeaderDesktop(){
+    const router = useRouter()
   const handleFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.files);
     if (event.target.files && event.target.files.length > 0 && event.target.files[0]) {
@@ -50,7 +51,10 @@ function AppBar() {
     >
       <Toolbar>
         <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+        <Link href="/">
           Update Photos
+            
+          </Link>
         </Typography>
         <Stack direction="row" spacing={2}>
           <IconButton aria-label="upload picture" component="label">
@@ -66,10 +70,9 @@ function AppBar() {
           <Button variant="contained" sx={{ textTransform: "none" }}>
             Connect wallet
           </Button>
+          
         </Stack>
       </Toolbar>
     </MuiAppBar>
   );
 }
-
-export default AppBar;
